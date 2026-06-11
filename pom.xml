@@ -9,101 +9,93 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Single source of truth for the Java version -->
+        <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- Centralized dependency versions -->
+        <selenium.version>4.44.0</selenium.version>
+        <testng.version>7.12.0</testng.version>
+        <poi.version>5.5.1</poi.version>
+        <extentreports.version>5.1.2</extentreports.version>
+        <allure.version>2.35.2</allure.version>
+        <log4j.version>2.24.3</log4j.version>
+        <commons.io.version>2.22.0</commons.io.version>
     </properties>
+
     <dependencies>
-        <!-- Source: https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
+        <!-- Selenium WebDriver -->
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>4.44.0</version>
-            <scope>compile</scope>
+            <version>${selenium.version}</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/org.testng/testng -->
+        <!-- TestNG -->
         <dependency>
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
-            <version>7.12.0</version>
+            <version>${testng.version}</version>
             <scope>test</scope>
         </dependency>
 
-
-        <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <!-- Apache POI (Excel handling) -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>5.5.1</version>
-            <scope>compile</scope>
+            <version>${poi.version}</version>
         </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.5.1</version>
-            <scope>compile</scope>
+            <version>${poi.version}</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/com.aventstack/extentreports -->
+        <!-- ExtentReports -->
         <dependency>
             <groupId>com.aventstack</groupId>
             <artifactId>extentreports</artifactId>
-            <version>5.1.2</version>
-            <scope>compile</scope>
+            <version>${extentreports.version}</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/io.qameta.allure/allure-testng -->
+        <!-- Allure TestNG -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
-            <version>2.35.2</version>
-            <scope>compile</scope>
+            <version>${allure.version}</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>3.0.0-beta3</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Source: https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
+        <!-- Log4j (api + core must share the same version) -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
-            <version>3.0.0-beta2</version>
-            <scope>compile</scope>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j.version}</version>
         </dependency>
 
-        <!-- Source: https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <!-- Commons IO -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.22.0</version>
-            <scope>compile</scope>
+            <version>${commons.io.version}</version>
         </dependency>
     </dependencies>
 
-    <!-- ===== Build Plugins ===== -->
     <build>
         <plugins>
 
-            <!-- Compiler -->
+            <!-- Compiler (version comes from maven.compiler.release property) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.12.1</version>
-                <configuration>
-                    <source>14</source>
-                    <target>14</target>
-                </configuration>
+                <version>3.13.0</version>
             </plugin>
 
-            <!-- Surefire (TestNG execution) -->
+            <!-- Surefire: runs TestNG suite -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -113,14 +105,12 @@
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>
                     <systemPropertyVariables>
-                        <allure.results.directory>
-                            ${project.basedir}/allure-results
-                        </allure.results.directory>
+                        <allure.results.directory>${project.basedir}/allure-results</allure.results.directory>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
 
-            <!-- Allure Report Plugin -->
+            <!-- Allure report generation -->
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
@@ -143,6 +133,5 @@
 
         </plugins>
     </build>
-
 
 </project>
