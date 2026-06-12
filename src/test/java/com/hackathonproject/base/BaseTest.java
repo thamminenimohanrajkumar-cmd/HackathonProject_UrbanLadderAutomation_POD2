@@ -34,13 +34,35 @@ public class BaseTest {
 
         log.info("===== Opening browser: " + browser + " =====");
 
-        // Selenium Manager (built into Selenium 4.6+) auto-resolves the driver
-        // binary for the installed browser. No driver paths or WebDriverManager needed.
-        WebDriver driver = switch (browser.toLowerCase()) {
-            case "edge"    -> new EdgeDriver(buildEdgeOptions());
-            case "firefox" -> new FirefoxDriver(buildFirefoxOptions());
-            default        -> new ChromeDriver(buildChromeOptions());
-        };
+        WebDriver driver;
+
+        try {
+            // Selenium Manager (built into Selenium 4.6+) auto-resolves the driver
+            // binary for the installed browser. No driver paths or WebDriverManager needed.
+            switch (browser.toLowerCase()) {
+                case "edge":
+                    driver = new EdgeDriver(buildEdgeOptions());
+                    break;
+                case "firefox":
+                    driver = new FirefoxDriver(buildFirefoxOptions());
+                    break;
+                case "chrome":
+                    driver = new ChromeDriver(buildChromeOptions());
+                    break;
+                default:
+                    throw new IllegalArgumentException(
+                            "Unsupported browser: '" + browser + "'. "
+                                    + "Supported values are: chrome, edge, firefox.");
+            }
+        } catch (IllegalArgumentException e) {
+            // Unsupported browser value - fail fast with a clear message.
+            log.error("Browser setup failed: " + e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            // Driver could not be started (e.g. browser not installed, Selenium Manager failure).
+            log.error("Could not start browser '" + browser + "'. Reason: " + e.getMessage());
+            throw new RuntimeException("Failed to initialize WebDriver for browser: " + browser, e);
+        }
 
         threadDriver.set(driver);
         wait = new WebDriverWait(driver, Duration.ofSeconds(ConfigReader.getExplicitWait()));

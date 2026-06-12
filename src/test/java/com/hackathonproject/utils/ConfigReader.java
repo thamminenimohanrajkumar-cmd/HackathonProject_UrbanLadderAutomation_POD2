@@ -36,11 +36,6 @@ public class ConfigReader {
     public static String getLivingRoomURL()      { return properties.getProperty("livingRoomURL"); }
     public static String getGiftCardURL()        { return properties.getProperty("giftCardURL"); }
 
-    // ===== Driver Paths =====
-    public static String getChromeDriverPath() { return properties.getProperty("chromeDriverPath"); }
-    public static String getEdgeDriverPath()   { return properties.getProperty("edgeDriverPath"); }
-    public static String getFirefoxDriverPath() { return properties.getProperty("firefoxDriverPath"); }
-
     // ===== Waits =====
     public static int getExplicitWait() {
         return parseIntProperty("explicitWait", 15);
